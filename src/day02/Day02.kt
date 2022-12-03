@@ -16,7 +16,7 @@ fun main() {
         "C" to "A"
     )
 
-    fun countFirstPartScore(round: Pair<String, String>): Int {
+    fun countScore(round: Pair<String, String>): Int {
         val selectedShapeScore = when (round.second) {
             "A" -> 1
             "B" -> 2
@@ -24,33 +24,32 @@ fun main() {
             else -> throw IllegalStateException("Nah")
         }
         val outcomeScore = when {
+            winningPairs.map { Pair(it.key, it.value) }.any{it == round} -> 6
             round.first == round.second -> 3
-            round.first == "A" && round.second == "B" -> 6
-            round.first == "B" && round.second == "C" -> 6
-            round.first == "C" && round.second == "A" -> 6
             else -> 0
         }
         return selectedShapeScore + outcomeScore
     }
 
-    fun countSecondPartScore(round: Pair<String, String>): Int {
+    fun getChosenSymbol(round: Pair<String, String>): String {
         val chosenSymbol = when (round.second) {
             "Y" -> round.first
             "Z" -> winningPairs[round.first]
             "X" -> winningPairs.entries.first { it.value == round.first }.key
             else -> throw IllegalStateException("Nah")
         }
-        return countFirstPartScore(Pair(round.first, chosenSymbol!!))
+        return chosenSymbol!!
     }
 
     fun part1(input: List<Pair<String, String>>): Int {
         return input.map { Pair(it.first, firstPartMapping[it.second]!!) }
-            .map { countFirstPartScore(it) }
+            .map { countScore(it) }
             .sum()
     }
 
     fun part2(input: List<Pair<String, String>>): Int {
-        return input.map { countSecondPartScore(it) }
+        return input.map { Pair(it.first, getChosenSymbol(it)) }
+            .map { countScore(it) }
             .sum()
     }
 

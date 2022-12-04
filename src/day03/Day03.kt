@@ -29,8 +29,7 @@ fun main() {
 
     fun part2(input: List<List<Rucksack>>): Int {
         return input.map {
-            val firstRucksack = it.first()
-            val char = it.fold(firstRucksack.getCharSet()) { acc, rucksack -> acc.intersect(rucksack.getCharSet()) }
+            val char = it.fold(it.first().getCharSet()) { acc, rucksack -> acc.intersect(rucksack.getCharSet()) }
                 .first()
             priorities[char]!!
         }.sum()
@@ -55,4 +54,3 @@ fun main() {
     println(part1(input))
     println(part2(input.chunked(3)))
 }
-
